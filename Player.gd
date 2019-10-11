@@ -17,11 +17,20 @@ const JUMP_BUFFER_MAX = 6
 var motion = Vector2()
 var friction = false
 
+var current_checkpoint = null
+
 var anim = ""
 var new_anim = ""
 var facing_right = true
+var wall_jumped = false
+
 var coyote_jump_buffer = 0
 var jump_buffer = 0
+var sticky_wall_buffer = 0
+var collision_right = false
+var collision_left = false
+var on_wall
+
 var has_jumped = false
 
 var haxis = 1
@@ -32,27 +41,44 @@ func _ready():
 	add_to_group("Player")
 
 func _physics_process(delta):
+
+	for i in get_slide_count():
+		var collision = get_slide_collision(i)
+		if collision.collider.is_in_group("Hazards"):
+			kill_player()
+		
 	haxis = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 	vaxis = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 	
 	if haxis != 0:
 		player_dir = haxis
 
+	sticky_wall_buffer-=1
+	if !on_wall or is_on_floor():
+		sticky_wall_buffer=0
+	elif (Input.is_action_just_pressed("move_right") and collision_left) or (Input.is_action_just_pressed("move_left") and collision_right):
+		sticky_wall_buffer = JUMP_BUFFER_MAX
+
 	#add gravity if we havent reached max fall speed yet
-	if motion.y < MAX_FALL_SPEED.y:
-		motion += delta * GRAVITY
-	
+	if on_wall:
+		if motion.y < MAX_FALL_SPEED.y/20:
+			motion += delta * GRAVITY
+	else:
+		if motion.y < MAX_FALL_SPEED.y:
+			motion += delta * GRAVITY
+
 	#move
 	motion = move_and_slide(motion, UP)
 
 	#jumping with buffer
-	if is_on_floor():
+	if is_on_floor() || wall_jumped:
 		coyote_jump_buffer = 0
 		if !has_jumped and jump_buffer < JUMP_BUFFER_MAX:
 			jump_buffer = JUMP_BUFFER_MAX
 			has_jumped = true
 			motion.y = -JUMP_SPEED
 			new_anim = "jump_inital"
+			wall_jumped = false
 	jump_buffer+=1
 		
 	#jumping with coyote time
@@ -63,6 +89,7 @@ func _physics_process(delta):
 			has_jumped = true
 			motion.y = -JUMP_SPEED
 			new_anim = "jump_inital"
+			wall_jumped = false
 	coyote_jump_buffer+=1
 
 	#if we release the jump key while rising then cut off the jump
@@ -81,44 +108,85 @@ func _physics_process(delta):
 			new_anim = "jump_rise"
 		elif motion.y > 0:
 			new_anim = "jump_fall"
+				
+	if sticky_wall_buffer <= 0:
+		#movement on ground
+		if is_on_floor():
+			if Input.is_action_pressed("move_right"):
+				motion.x = min(motion.x+ACCELERATION, MAX_SPEED)
+				if motion.x < ACCELERATION*4:
+					new_anim = "run_inital"
+				else:
+					new_anim = "run"
+				facing_right = true
+				friction = false
+			elif Input.is_action_pressed("move_left"):
+				motion.x = max(motion.x-ACCELERATION, -MAX_SPEED)
+				if motion.x > -ACCELERATION*4:
+					new_anim = "run_inital"
+				else:
+					new_anim = "run"
+				facing_right = false
+				friction = false
+			else:
+				friction = true
+		#movement in air
+		else:
+			if Input.is_action_pressed("move_right"):
+				motion.x = min(motion.x+AIR_ACCELERATION, MAX_SPEED)
+				facing_right = true
+				friction = false
+			elif Input.is_action_pressed("move_left"):
+				motion.x = max(motion.x-AIR_ACCELERATION, -MAX_SPEED)
+				facing_right = false
+				friction = false
+			else:
+				friction = true
+	
+		#deceleration
+		if is_on_floor():
+			if friction:
+				motion.x = lerp(motion.x, 0, GROUND_FRICTION)
+		else:
+			if friction:
+				motion.x = lerp(motion.x, 0, AIR_FRICTION)
 			
-	#movement on ground
-	if is_on_floor():
-		if Input.is_action_pressed("move_right"):
-			motion.x = min(motion.x+ACCELERATION, MAX_SPEED)
-			if motion.x < ACCELERATION*4:
-				new_anim = "run_inital"
-			else:
-				new_anim = "run"
-			facing_right = true
-			friction = false
-		elif Input.is_action_pressed("move_left"):
-			motion.x = max(motion.x-ACCELERATION, -MAX_SPEED)
-			if motion.x > -ACCELERATION*4:
-				new_anim = "run_inital"
-			else:
-				new_anim = "run"
-			facing_right = false
-			friction = false
-		else:
-			friction = true
-	#movement in air
-	else:
-		if Input.is_action_pressed("move_right"):
-			motion.x = min(motion.x+AIR_ACCELERATION, MAX_SPEED)
-			facing_right = true
-			friction = false
-		elif Input.is_action_pressed("move_left"):
-			motion.x = max(motion.x-AIR_ACCELERATION, -MAX_SPEED)
-			facing_right = false
-			friction = false
-		else:
-			friction = true
+	#wall jump
+	if on_wall:
+		if Input.is_action_just_pressed("jump"):
+			motion.x = -haxis*MAX_SPEED
+			wall_jumped = true
 
-	#deceleration
-	if is_on_floor():
-		if friction:
-			motion.x = lerp(motion.x, 0, GROUND_FRICTION)
-	else:
-		if friction:
-			motion.x = lerp(motion.x, 0, AIR_FRICTION)
+func kill_player():
+	global_position = current_checkpoint.global_position
+	
+func enemy_jump():
+	motion.y = -JUMP_SPEED
+
+func _on_WallOverlap_body_entered(body):
+	if body is TileMap:
+		kill_player()
+
+func _on_WallOverlap_area_entered(area):
+	if area.is_in_group("Checkpoint"):
+		current_checkpoint = area
+	
+func _on_CollisionRight_body_entered(body):
+	if body is TileMap:
+		collision_right = true
+		on_wall = true
+
+func _on_CollisionRight_body_exited(body):
+	if body is TileMap:
+		collision_right = false
+		on_wall = false
+
+func _on_CollisionLeft_body_entered(body):
+	if body is TileMap:
+		collision_left = true
+		on_wall = true
+
+func _on_CollisionLeft_body_exited(body):
+	if body is TileMap:
+		collision_left = false
+		on_wall = false

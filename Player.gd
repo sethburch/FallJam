@@ -24,6 +24,8 @@ var new_anim = ""
 var facing_right = true
 var wall_jumped = false
 
+var key_count = 0
+
 var coyote_jump_buffer = 0
 var jump_buffer = 0
 var sticky_wall_buffer = 0
@@ -69,6 +71,14 @@ func _physics_process(delta):
 
 	#move
 	motion = move_and_slide(motion, UP)
+	
+	#play idle if we're not landing
+	if anim != "land":
+		new_anim = "idle"
+	
+	#play landing animation when hitting ground
+	if is_on_floor() and anim == "fall":
+		new_anim = "land"
 
 	#jumping with buffer
 	if is_on_floor() || wall_jumped:
@@ -77,7 +87,7 @@ func _physics_process(delta):
 			jump_buffer = JUMP_BUFFER_MAX
 			has_jumped = true
 			motion.y = -JUMP_SPEED
-			new_anim = "jump_inital"
+			new_anim = "jump"
 			wall_jumped = false
 	jump_buffer+=1
 		
@@ -88,7 +98,7 @@ func _physics_process(delta):
 			coyote_jump_buffer = JUMP_BUFFER_MAX
 			has_jumped = true
 			motion.y = -JUMP_SPEED
-			new_anim = "jump_inital"
+			new_anim = "jump"
 			wall_jumped = false
 	coyote_jump_buffer+=1
 
@@ -98,34 +108,34 @@ func _physics_process(delta):
 		#if we're falling
 		if motion.y < 0:
 			motion.y = lerp(motion.y, 0, JUMP_FALLOFF_SPEED)
-			new_anim = "jump_peak"
+			new_anim = "midair"
 
 	#play jump animations
 	if !is_on_floor():
 		if motion.y > -100 and motion.y < 100:
-			new_anim = "jump_peak"
+			new_anim = "midair"
 		elif motion.y < 0 and motion.y > -JUMP_SPEED+100:
-			new_anim = "jump_rise"
+			new_anim = "jump"
 		elif motion.y > 0:
-			new_anim = "jump_fall"
+			new_anim = "fall"
 				
 	if sticky_wall_buffer <= 0:
 		#movement on ground
 		if is_on_floor():
 			if Input.is_action_pressed("move_right"):
 				motion.x = min(motion.x+ACCELERATION, MAX_SPEED)
-				if motion.x < ACCELERATION*4:
-					new_anim = "run_inital"
-				else:
-					new_anim = "run"
+#				if motion.x < ACCELERATION*4:
+#					#new_anim = "run"
+				#else:
+				new_anim = "walk"
 				facing_right = true
 				friction = false
 			elif Input.is_action_pressed("move_left"):
 				motion.x = max(motion.x-ACCELERATION, -MAX_SPEED)
-				if motion.x > -ACCELERATION*4:
-					new_anim = "run_inital"
-				else:
-					new_anim = "run"
+#				if motion.x > -ACCELERATION*4:
+#					new_anim = "walk"
+#				else:
+				new_anim = "walk"
 				facing_right = false
 				friction = false
 			else:
@@ -153,15 +163,25 @@ func _physics_process(delta):
 			
 	#wall jump
 	if on_wall:
+		new_anim = "cling"
+		facing_right = !facing_right
 		if Input.is_action_just_pressed("jump"):
 			motion.x = -haxis*MAX_SPEED
 			wall_jumped = true
+
+func _process(delta):
+	#play animation
+	if anim != new_anim:
+		anim = new_anim
+		$Sprite.play(anim)
+	$Sprite.flip_h = !facing_right
 
 func kill_player():
 	global_position = current_checkpoint.global_position
 	
 func enemy_jump():
 	motion.y = -JUMP_SPEED
+	wall_jumped = true
 
 func _on_WallOverlap_body_entered(body):
 	if body is TileMap:
@@ -190,3 +210,10 @@ func _on_CollisionLeft_body_exited(body):
 	if body is TileMap:
 		collision_left = false
 		on_wall = false
+		
+func got_key():
+	key_count += 1
+
+func _on_Sprite_animation_finished():
+	if $Sprite.animation == "land":
+		new_anim = "idle"

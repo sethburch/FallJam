@@ -9,6 +9,10 @@ func enable_red(enable):
 		current_level.get_node("RedHazards").tile_set.tile_set_texture(0, load("res://red_spikes_enabled.png"))
 		current_level.get_node("RedHazards").set_collision_layer_bit(0, 1)
 		current_level.get_node("RedHazards").set_collision_mask_bit(0, 1)
+#		for i in get_child_count():
+#			current_level.get_node("Springs").tile_set.tile_set_texture(0, load("res://red_spikes_enabled.png"))
+#			current_level.get_node("Springs").get_child(i).set_collision_layer_bit(0, 1)
+#			current_level.get_node("Springs").get_child(i).set_collision_mask_bit(0, 1)
 	if !enable:
 		current_level.get_node("RedTiles").tile_set.tile_set_texture(0, load("res://red_disabled.png"))
 		current_level.get_node("RedTiles").set_collision_layer_bit(0, 0)

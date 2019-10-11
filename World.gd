@@ -8,6 +8,9 @@ var current_color = TILES.BLUE
 var red_enabled = true
 var blue_enabled = false
 
+var red_player = preload("res://RedPlayer.tres")
+var blue_player = preload("res://BluePlayer.tres")
+
 func _physics_process(delta):
 	if Input.is_action_just_pressed("debug"):
 		red_enabled = !red_enabled
@@ -38,10 +41,12 @@ func _switch():
 func update_level():
 	if red_enabled:
 		$CurrentLevel.enable_red(true)
+		$Player/Sprite.frames = red_player
 	if !red_enabled:
 		$CurrentLevel.enable_red(false)
 	if blue_enabled:
 		$CurrentLevel.enable_blue(true)
+		$Player/Sprite.frames = blue_player
 	if !blue_enabled:
 		$CurrentLevel.enable_blue(false)
 

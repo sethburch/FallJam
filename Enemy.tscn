@@ -27,5 +27,11 @@ shape = SubResource( 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Jumpbox"]
 position = Vector2( 0, -9.72714 )
 shape = SubResource( 2 )
+
+[node name="Patrol1" type="Position2D" parent="."]
+position = Vector2( 0, -45.4545 )
+
+[node name="Patrol2" type="Position2D" parent="."]
+position = Vector2( 0, 45.4545 )
 [connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]
 [connection signal="body_entered" from="Jumpbox" to="." method="_on_Jumpbox_body_entered"]

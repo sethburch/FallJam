@@ -24,8 +24,8 @@ config/icon="res://icon.png"
 window/size/width=256
 window/size/height=256
 window/size/resizable=false
-window/size/test_width=544
-window/size/test_height=544
+window/size/test_width=512
+window/size/test_height=512
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 

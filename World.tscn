@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://CurrentLevel.gd" type="Script" id=2]
 [ext_resource path="res://Level1.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Level2.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Level3.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Checkpoints.gd" type="Script" id=7]
+[ext_resource path="res://Level4.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Checkpoints.gd" type="Script" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6.88753, 43.9907 )
@@ -25,19 +26,21 @@ position = Vector2( 256.298, 0 )
 [node name="Level3" parent="CurrentLevel" instance=ExtResource( 5 )]
 position = Vector2( -256, 0 )
 
+[node name="Level4" parent="CurrentLevel" instance=ExtResource( 6 )]
+position = Vector2( 512, 0 )
+
 [node name="GameTimer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
 
-[node name="Player" parent="." instance=ExtResource( 6 )]
-position = Vector2( -129.152, 7.04789 )
+[node name="Player" parent="." instance=ExtResource( 7 )]
+position = Vector2( 395.848, 7.04789 )
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
 
 [node name="Checkpoints" type="Node2D" parent="."]
-editor/display_folded = true
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="1" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true

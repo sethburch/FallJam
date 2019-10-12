@@ -1,46 +1,108 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://CurrentLevel.gd" type="Script" id=2]
-[ext_resource path="res://Level1.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Level2.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Level3.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Level4.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Checkpoints.gd" type="Script" id=8]
+[ext_resource path="res://Levels/Level1.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Levels/Level2.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Levels/Level3.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Levels/Level4.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Levels/Level5.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Levels/Level6.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Levels/Level7.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Levels/Level8.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Levels/Level9.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Levels/Level10.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Levels/Level11.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Levels/Level12.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Levels/Level13.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Levels/Level14.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Levels/Level15.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Levels/Level16.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Camera.gd" type="Script" id=20]
+[ext_resource path="res://Checkpoints.gd" type="Script" id=21]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6.88753, 43.9907 )
 
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 6.88753, 45.9744 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 17.5655, 12.9571 )
+
 [node name="World" type="Node"]
 script = ExtResource( 1 )
 
-[node name="CurrentLevel" type="Node" parent="."]
+[node name="CurrentLevel" type="Node2D" parent="."]
+pause_mode = 2
 script = ExtResource( 2 )
 
 [node name="Level1" parent="CurrentLevel" instance=ExtResource( 3 )]
+pause_mode = 0
 
 [node name="Level2" parent="CurrentLevel" instance=ExtResource( 4 )]
-position = Vector2( 256.298, 0 )
+pause_mode = 0
+position = Vector2( 255.298, 0 )
 
 [node name="Level3" parent="CurrentLevel" instance=ExtResource( 5 )]
-position = Vector2( -256, 0 )
+pause_mode = 0
+position = Vector2( -512, 0 )
 
 [node name="Level4" parent="CurrentLevel" instance=ExtResource( 6 )]
-position = Vector2( 512, 0 )
+pause_mode = 0
+position = Vector2( 1022, -512 )
+
+[node name="Level5" parent="CurrentLevel" instance=ExtResource( 7 )]
+position = Vector2( 510.599, 0 )
+
+[node name="Level6" parent="CurrentLevel" instance=ExtResource( 8 )]
+position = Vector2( -512, -256 )
+
+[node name="Level7" parent="CurrentLevel" instance=ExtResource( 9 )]
+position = Vector2( 1022, 0 )
+
+[node name="Level8" parent="CurrentLevel" instance=ExtResource( 10 )]
+position = Vector2( 766, 0 )
+
+[node name="Level9" parent="CurrentLevel" instance=ExtResource( 11 )]
+position = Vector2( 1278, 0 )
+
+[node name="Level10" parent="CurrentLevel" instance=ExtResource( 12 )]
+position = Vector2( 1534, 0 )
+
+[node name="Level11" parent="CurrentLevel" instance=ExtResource( 13 )]
+position = Vector2( 1534, -256 )
+
+[node name="Level12" parent="CurrentLevel" instance=ExtResource( 14 )]
+position = Vector2( 1534, -512 )
+
+[node name="Level13" parent="CurrentLevel" instance=ExtResource( 15 )]
+position = Vector2( 1278, -512 )
+
+[node name="Level14" parent="CurrentLevel" instance=ExtResource( 16 )]
+position = Vector2( 1790, 0 )
+
+[node name="Level15" parent="CurrentLevel" instance=ExtResource( 17 )]
+position = Vector2( 1022.38, -256 )
+
+[node name="Level16" parent="CurrentLevel" instance=ExtResource( 18 )]
+position = Vector2( 1278, -256.537 )
 
 [node name="GameTimer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
 
-[node name="Player" parent="." instance=ExtResource( 7 )]
-position = Vector2( 395.848, 7.04789 )
+[node name="Player" parent="." instance=ExtResource( 19 )]
+position = Vector2( 901.291, -508.89 )
 
 [node name="Camera" type="Camera2D" parent="."]
+pause_mode = 2
 current = true
+script = ExtResource( 20 )
 
 [node name="Checkpoints" type="Node2D" parent="."]
-script = ExtResource( 8 )
+script = ExtResource( 21 )
 
 [node name="1" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true
@@ -52,6 +114,26 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/1"]
 shape = SubResource( 1 )
 
+[node name="6" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 133.866, -1.58154 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/6"]
+shape = SubResource( 1 )
+
+[node name="5" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( -138.226, -1.58154 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/5"]
+shape = SubResource( 1 )
+
 [node name="2" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true
 position = Vector2( -119.414, -1.58154 )
@@ -61,4 +143,95 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/2"]
 shape = SubResource( 1 )
+
+[node name="4" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 393, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/4"]
+shape = SubResource( 1 )
+
+[node name="8" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 1158.45, -85.8871 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/8"]
+shape = SubResource( 1 )
+
+[node name="13" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 1152.79, -155.648 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/13"]
+shape = SubResource( 3 )
+
+[node name="11" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 1141.76, -574.099 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/11"]
+shape = SubResource( 1 )
+
+[node name="12" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 900.584, -509.824 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/12"]
+shape = SubResource( 1 )
+
+[node name="9" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 1414.45, 98.7176 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/9"]
+shape = SubResource( 1 )
+
+[node name="10" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 1541.82, -432.864 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/10"]
+shape = SubResource( 1 )
+
+[node name="7" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 375, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/7"]
+shape = SubResource( 1 )
+
+[node name="3" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( -0.382324, 63.5062 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/3"]
+position = Vector2( 0, 34 )
+shape = SubResource( 2 )
 [connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]

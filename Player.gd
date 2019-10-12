@@ -1,15 +1,15 @@
 extends KinematicBody2D
 
 const UP = Vector2(0, -1)
-const GRAVITY = Vector2(0, 1500)
-const MAX_FALL_SPEED = Vector2(0, 1500)
-const JUMP_SPEED = 450
-const JUMP_HEIGHT = 900
+const GRAVITY = Vector2(0, 800)
+const MAX_FALL_SPEED = Vector2(0, 200)
+const JUMP_SPEED = 300
+const JUMP_HEIGHT = 10
 const ACCELERATION = 50
-const AIR_ACCELERATION = 30
-const MAX_SPEED = 200
+const AIR_ACCELERATION = 40
+const MAX_SPEED = 150
 const MAX_DASH_SPEED = 1500
-const AIR_FRICTION = 0.05
+const AIR_FRICTION = 0.8
 const GROUND_FRICTION = .3
 const JUMP_FALLOFF_SPEED = .5
 const JUMP_BUFFER_MAX = 6
@@ -18,6 +18,7 @@ var motion = Vector2()
 var friction = false
 
 var current_checkpoint = null
+var just_died = false
 
 var anim = ""
 var new_anim = ""
@@ -63,14 +64,19 @@ func _physics_process(delta):
 
 	#add gravity if we havent reached max fall speed yet
 	if on_wall:
-		if motion.y < MAX_FALL_SPEED.y/20:
+		if motion.y < MAX_FALL_SPEED.y/10:
 			motion += delta * GRAVITY
+		else:
+			motion.y = MAX_FALL_SPEED.y/10
 	else:
 		if motion.y < MAX_FALL_SPEED.y:
 			motion += delta * GRAVITY
 
 	#move
 	motion = move_and_slide(motion, UP)
+	
+	if Input.is_action_just_pressed("move_left") || Input.is_action_just_pressed("move_right"):
+		just_died = false
 	
 	#play idle if we're not landing
 	if anim != "land":
@@ -122,33 +128,37 @@ func _physics_process(delta):
 	if sticky_wall_buffer <= 0:
 		#movement on ground
 		if is_on_floor():
-			if Input.is_action_pressed("move_right"):
+			if Input.is_action_pressed("move_right") and !just_died:
 				motion.x = min(motion.x+ACCELERATION, MAX_SPEED)
 #				if motion.x < ACCELERATION*4:
 #					#new_anim = "run"
 				#else:
 				new_anim = "walk"
-				facing_right = true
+				if !on_wall:
+					facing_right = true
 				friction = false
-			elif Input.is_action_pressed("move_left"):
+			elif Input.is_action_pressed("move_left") and !just_died:
 				motion.x = max(motion.x-ACCELERATION, -MAX_SPEED)
 #				if motion.x > -ACCELERATION*4:
 #					new_anim = "walk"
 #				else:
 				new_anim = "walk"
-				facing_right = false
+				if !on_wall:
+					facing_right = false
 				friction = false
 			else:
 				friction = true
 		#movement in air
 		else:
-			if Input.is_action_pressed("move_right"):
+			if Input.is_action_pressed("move_right") and !just_died:
 				motion.x = min(motion.x+AIR_ACCELERATION, MAX_SPEED)
-				facing_right = true
+				if !on_wall:
+					facing_right = true
 				friction = false
-			elif Input.is_action_pressed("move_left"):
+			elif Input.is_action_pressed("move_left") and !just_died:
 				motion.x = max(motion.x-AIR_ACCELERATION, -MAX_SPEED)
-				facing_right = false
+				if !on_wall:
+					facing_right = false
 				friction = false
 			else:
 				friction = true
@@ -164,10 +174,10 @@ func _physics_process(delta):
 	#wall jump
 	if on_wall:
 		new_anim = "cling"
-		facing_right = !facing_right
 		if Input.is_action_just_pressed("jump"):
-			motion.x = -haxis*MAX_SPEED
+			motion.x = -haxis*MAX_SPEED*1.5
 			wall_jumped = true
+			
 
 func _process(delta):
 	#play animation
@@ -178,9 +188,23 @@ func _process(delta):
 
 func kill_player():
 	global_position = current_checkpoint.global_position
+	just_died = true
+	get_parent().get_node("CurrentLevel").respawn_enemies()
+	motion = Vector2(0,0)
 	
 func enemy_jump():
 	motion.y = -JUMP_SPEED
+	wall_jumped = true
+	
+func spring_jump(rot):
+	if rot == 90:
+		motion.x = JUMP_SPEED
+	if rot == 0:
+		motion.y = -JUMP_SPEED
+	if rot == 180:
+		motion.x = -JUMP_SPEED
+	if rot == 270:
+		motion.y = JUMP_SPEED
 	wall_jumped = true
 
 func _on_WallOverlap_body_entered(body):
@@ -193,21 +217,25 @@ func _on_WallOverlap_area_entered(area):
 	
 func _on_CollisionRight_body_entered(body):
 	if body is TileMap:
+		facing_right = false
 		collision_right = true
 		on_wall = true
 
 func _on_CollisionRight_body_exited(body):
 	if body is TileMap:
+		facing_right = true
 		collision_right = false
 		on_wall = false
 
 func _on_CollisionLeft_body_entered(body):
 	if body is TileMap:
+		facing_right = true
 		collision_left = true
 		on_wall = true
 
 func _on_CollisionLeft_body_exited(body):
 	if body is TileMap:
+		facing_right = false
 		collision_left = false
 		on_wall = false
 		

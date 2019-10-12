@@ -31,22 +31,22 @@ func _switch():
 	blue_enabled = !blue_enabled
 	if red_enabled:
 		$CurrentLevel.enable_red(true)
-	if !red_enabled:
-		$CurrentLevel.enable_red(false)
-	if blue_enabled:
-		$CurrentLevel.enable_blue(true)
-	if !blue_enabled:
-		$CurrentLevel.enable_blue(false)
-
-func update_level():
-	if red_enabled:
-		$CurrentLevel.enable_red(true)
 		$Player/Sprite.frames = red_player
 	if !red_enabled:
 		$CurrentLevel.enable_red(false)
 	if blue_enabled:
 		$CurrentLevel.enable_blue(true)
 		$Player/Sprite.frames = blue_player
+	if !blue_enabled:
+		$CurrentLevel.enable_blue(false)
+
+func update_level():
+	if red_enabled:
+		$CurrentLevel.enable_red(true)
+	if !red_enabled:
+		$CurrentLevel.enable_red(false)
+	if blue_enabled:
+		$CurrentLevel.enable_blue(true)
 	if !blue_enabled:
 		$CurrentLevel.enable_blue(false)
 

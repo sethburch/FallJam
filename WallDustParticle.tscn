@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=2]
+
+[sub_resource type="Curve" id=4]
+min_value = -200.0
+max_value = 200.0
+_data = [ Vector2( 0, 26.4 ), 0.0, 445.809, 0, 0, Vector2( 0.142332, 93.28 ), 0.0, 0.0, 0, 0, Vector2( 0.205081, -1.75998 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.3438 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+emission_shape = 2
+emission_box_extents = Vector3( -1, 1, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, -1, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel_curve = SubResource( 5 )
+scale_curve = SubResource( 2 )
+
+[node name="DustParticle" type="Particles2D"]
+amount = 100
+lifetime = 0.9
+local_coords = false
+process_material = SubResource( 3 )

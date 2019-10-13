@@ -1,6 +1,12 @@
 extends Area2D
 
 var room_transition_start = false
+var current_bg
+
+
+func _ready():
+	current_bg = get_node("BG" + str(randi() % 4 + 1))
+	current_bg.visible = true
 
 func _physics_process(delta):
 	for body in get_overlapping_bodies():
@@ -18,4 +24,3 @@ func _on_DefaultLevel_body_entered(body):
 	get_parent().get_parent().get_node("CurrentLevel").respawn_enemies()
 	#get_parent().get_parent().get_node("Player").motion = Vector2(0, 0)
 	room_transition_start = true
-	

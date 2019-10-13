@@ -11,6 +11,8 @@ var dead = false
 var RED = preload("res://RedEnemy.tres")
 var BLUE = preload("res://BlueEnemy.tres")
 
+var death_particle = preload("res://DeathParticle.tscn")
+
 func _ready():
 	if color == "red":
 		$Sprite.frames = RED
@@ -43,12 +45,15 @@ func _switch_patrol():
 		current_patrol = p1_pos
 		
 func kill_enemy():
-	visible = false
+	var _death_part = death_particle.instance()
+	get_node("..").get_parent().add_child(_death_part)
+	_death_part.global_position = global_position
+	$Sprite.visible = false
 	$Hitbox/CollisionShape2D.disabled = true
 	$Jumpbox/CollisionShape2D.disabled = true
 	
 func respawn_enemy():
-	visible = true
+	$Sprite.visible = true
 	dead = false
 	$Hitbox/CollisionShape2D.disabled = false
 	$Jumpbox/CollisionShape2D.disabled = false

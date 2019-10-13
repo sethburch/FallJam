@@ -1,8 +1,21 @@
 extends Node2D
 onready var current_level = get_node("Level1")
 
+var switch_timer : float = 0.0
+
+#func _ready():
+#	$Music.play()
+	#$GameTimer.start()
+	
+#func _physics_process(delta):
+#	switch_timer += (1.0+(delta/60.0))
+#	if switch_timer >= 120.0:
+#		switch_timer = 0
+#		get_parent()._switch()
+
 func enable_red(enable):
 	if enable:
+		current_level.current_bg.modulate = Color("#d35a5a")
 		current_level.get_node("RedTiles").tile_set.tile_set_texture(0, load("res://red_enabled.png"))
 		current_level.get_node("RedTiles").set_collision_layer_bit(0, 1)
 		current_level.get_node("RedTiles").set_collision_mask_bit(0, 1)
@@ -31,6 +44,7 @@ func enable_red(enable):
 	
 func enable_blue(enable):
 	if enable:
+		current_level.current_bg.modulate = Color("#52a4a4")
 		current_level.get_node("BlueTiles").tile_set.tile_set_texture(0, load("res://blue_enabled.png"))
 		current_level.get_node("BlueTiles").set_collision_layer_bit(0, 1)
 		current_level.get_node("BlueTiles").set_collision_mask_bit(0, 1)
@@ -65,3 +79,11 @@ func respawn_enemies():
 	for i in current_level.get_node("Enemies").get_child_count():
 		if current_level.get_node("Enemies").get_child(i).dead:
 			current_level.get_node("Enemies").get_child(i).respawn_enemy()
+
+func _process(delta):
+	if current_level == get_node("Level1"):
+		if get_parent().get_node("Player").key_count >= 7:
+			current_level.get_node("Door").open()
+			set_process(false)
+#func _on_GameTimer_timeout():
+#	get_parent()._switch()

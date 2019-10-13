@@ -1,18 +1,42 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://RedPlayer.tres" type="SpriteFrames" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="Curve" id=1]
+min_value = -200.0
+max_value = 200.0
+_data = [ Vector2( 0, 26.4 ), 0.0, 445.809, 0, 0, Vector2( 0.142332, 93.28 ), 0.0, 0.0, 0, 0, Vector2( 0.205081, -1.75998 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.3438 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+emission_shape = 2
+emission_box_extents = Vector3( -1, 1, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, -1, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel_curve = SubResource( 2 )
+scale_curve = SubResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 3.73585, 7.50005 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 3.01362, 6.21012 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 1.999, 7.16274 )
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 1.999, 7.16274 )
 
 [node name="Player" type="KinematicBody2D"]
@@ -22,31 +46,55 @@ script = ExtResource( 1 )
 frames = ExtResource( 2 )
 animation = "idle"
 
+[node name="WallParticles" type="Position2D" parent="Sprite"]
+position = Vector2( -4, 1 )
+
+[node name="DustParticle" type="Particles2D" parent="Sprite/WallParticles"]
+position = Vector2( -0.827415, -0.724195 )
+emitting = false
+amount = 100
+lifetime = 0.9
+local_coords = false
+process_material = SubResource( 5 )
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( -0.444456, 3.4861 )
-shape = SubResource( 1 )
+shape = SubResource( 6 )
 
 [node name="WallOverlap" type="Area2D" parent="."]
 pause_mode = 2
 position = Vector2( 0, 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WallOverlap"]
+visible = false
 position = Vector2( 0, -1.01216 )
-shape = SubResource( 2 )
+shape = SubResource( 7 )
 
 [node name="CollisionRight" type="Area2D" parent="."]
 position = Vector2( 0, 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionRight"]
+visible = false
 position = Vector2( 4.99703, -0.0769444 )
-shape = SubResource( 3 )
+shape = SubResource( 8 )
 
 [node name="CollisionLeft" type="Area2D" parent="."]
 position = Vector2( 0, 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionLeft"]
+visible = false
 position = Vector2( -6.12504, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 9 )
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+
+[node name="FeetPos" type="Position2D" parent="."]
+position = Vector2( 0, 11.0861 )
+
+[node name="KeyPos" type="Position2D" parent="."]
+position = Vector2( -20, 0 )
 [connection signal="animation_finished" from="Sprite" to="." method="_on_Sprite_animation_finished"]
 [connection signal="area_entered" from="WallOverlap" to="." method="_on_WallOverlap_area_entered"]
 [connection signal="body_entered" from="WallOverlap" to="." method="_on_WallOverlap_body_entered"]

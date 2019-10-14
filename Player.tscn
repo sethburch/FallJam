@@ -43,11 +43,13 @@ extents = Vector2( 1.999, 7.16274 )
 script = ExtResource( 1 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, 10 )
 frames = ExtResource( 2 )
 animation = "idle"
+offset = Vector2( 0, -10 )
 
 [node name="WallParticles" type="Position2D" parent="Sprite"]
-position = Vector2( -4, 1 )
+position = Vector2( -6.11819, -10.0704 )
 
 [node name="DustParticle" type="Particles2D" parent="Sprite/WallParticles"]
 position = Vector2( -0.827415, -0.724195 )

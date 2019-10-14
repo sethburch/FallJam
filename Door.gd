@@ -5,4 +5,5 @@ func open():
 	
 func _on_AnimatedSprite_animation_finished():
 	if $AnimatedSprite.animation == "open":
-		queue_free()
+		$StaticBody2D/CollisionShape2D.disabled = true
+		$AnimatedSprite.visible = false

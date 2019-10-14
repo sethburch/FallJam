@@ -3,8 +3,13 @@ onready var current_level = get_node("Level1")
 
 var switch_timer : float = 0.0
 
-#func _ready():
-#	$Music.play()
+var final_time : int = 0
+
+var open_door = preload("res://sound/open_door.wav")
+
+func _ready():
+	#get_parent().get_node("Music").play()
+	pass
 	#$GameTimer.start()
 	
 #func _physics_process(delta):
@@ -12,6 +17,8 @@ var switch_timer : float = 0.0
 #	if switch_timer >= 120.0:
 #		switch_timer = 0
 #		get_parent()._switch()
+
+
 
 func enable_red(enable):
 	if enable:
@@ -80,10 +87,18 @@ func respawn_enemies():
 		if current_level.get_node("Enemies").get_child(i).dead:
 			current_level.get_node("Enemies").get_child(i).respawn_enemy()
 
+func _physics_process(delta):
+	if get_parent().game_start:
+		final_time+=1
+
 func _process(delta):
 	if current_level == get_node("Level1"):
 		if get_parent().get_node("Player").key_count >= 7:
 			current_level.get_node("Door").open()
+			get_parent().get_node("Sound").stream = open_door
+			get_parent().get_node("Sound").play()
 			set_process(false)
+
+	
 #func _on_GameTimer_timeout():
 #	get_parent()._switch()

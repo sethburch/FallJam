@@ -15,11 +15,11 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Gemini"
+config/name="GEMINI"
 run/main_scene="res://World.tscn"
 boot_splash/image="res://boot_splash.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
-config/icon="res://gemini_icon.png"
+config/icon="res://gemini_icon_5.png"
 
 [display]
 
@@ -29,7 +29,7 @@ window/size/resizable=false
 window/size/test_width=768
 window/size/test_height=768
 window/stretch/mode="viewport"
-window/stretch/aspect="keep"
+window/stretch/aspect="expand"
 
 [importer_defaults]
 

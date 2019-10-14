@@ -19,6 +19,7 @@ var friction = false
 
 var current_checkpoint = null
 var just_died = false
+var reset_death = false
 
 var anim = ""
 var new_anim = ""
@@ -43,6 +44,8 @@ var haxis = 1
 var vaxis = 0
 var player_dir = haxis
 
+var dead = false
+
 var snd_jump = preload("res://sound/jump.wav")
 var snd_land = preload("res://sound/land.wav")
 var snd_pickup_key = preload("res://sound/pickup_key.wav")
@@ -61,7 +64,8 @@ func _physics_process(delta):
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
 		if collision.collider.is_in_group("Hazards"):
-			kill_player()
+			if !dead:
+				kill_player()
 		if keys_carrying > 0:
 			if collision.collider.is_in_group("Wall") and is_on_floor():
 				key_gather_buffer+=1
@@ -75,6 +79,17 @@ func _physics_process(delta):
 					get_parent().set_key_count(key_count)
 			else:
 				key_gather_buffer = 0
+		
+				
+	if reset_death:
+		reset_death = false
+		dead = false
+		
+	if dead:
+		if Input.is_action_just_pressed("jump"):
+			new_anim = "idle"
+			death()
+		return
 		
 	haxis = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 	vaxis = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
@@ -97,7 +112,7 @@ func _physics_process(delta):
 	else:
 		if motion.y < MAX_FALL_SPEED.y:
 			motion += delta * GRAVITY
-
+			
 	#move
 	motion = move_and_slide(motion, UP)
 	
@@ -139,6 +154,13 @@ func _physics_process(delta):
 			new_anim = "jump"
 			wall_jumped = false
 	coyote_jump_buffer+=1
+
+	if !Input.is_action_pressed("jump") and has_jumped:
+		has_jumped = false
+		#if we're falling
+		if motion.y < 0:
+			motion.y = lerp(motion.y, 0, JUMP_FALLOFF_SPEED)
+			new_anim = "midair"
 
 	#if we release the jump key while rising then cut off the jump
 	if Input.is_action_just_released("jump"):
@@ -215,12 +237,13 @@ func _physics_process(delta):
 			wall_jumped = true
 	else:
 		$Sprite/WallParticles/DustParticle.emitting = false
+		
+
 			
 
 func _process(delta):
 	if get_parent().game_start:
 		set_physics_process(true)
-
 	#play animation
 	if anim != new_anim:
 		anim = new_anim
@@ -234,8 +257,15 @@ func _process(delta):
 		$KeyPos.position.x = 20
 
 func kill_player():
+	dead = true
 	just_died = true
-	play_sound(snd_death, false)
+	has_jumped = false
+	new_anim = "death"
+	$Sprite.frame = 0
+	play_sound(snd_death, false) 
+	
+func death():
+	reset_death = true
 	global_position = current_checkpoint.global_position
 	get_parent().get_node("CurrentLevel").respawn_enemies()
 	motion = Vector2(0,0)
@@ -245,7 +275,6 @@ func kill_player():
 		key_carrying = null
 		keys_carrying = 0
 		
-	
 func enemy_jump():
 	play_sound(snd_jump_spring, false)
 	motion.y = -JUMP_SPEED
@@ -304,6 +333,9 @@ func got_key(key):
 	#key_count += 1
 
 func _on_Sprite_animation_finished():
+	if $Sprite.animation == "death":
+		new_anim = "idle"
+		death()
 	if $Sprite.animation == "land":
 		new_anim = "idle"
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://CurrentLevel.gd" type="Script" id=2]
@@ -28,12 +28,22 @@
 [ext_resource path="res://Levels/Level24.tscn" type="PackedScene" id=26]
 [ext_resource path="res://Levels/Level25.tscn" type="PackedScene" id=27]
 [ext_resource path="res://Levels/Level26.tscn" type="PackedScene" id=28]
-[ext_resource path="res://sound/main_theme2.wav" type="AudioStream" id=29]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=30]
+[ext_resource path="res://FinalArea.gd" type="Script" id=29]
+[ext_resource path="res://sound/main_theme2.wav" type="AudioStream" id=30]
 [ext_resource path="res://Camera.gd" type="Script" id=31]
 [ext_resource path="res://Checkpoints.gd" type="Script" id=32]
 [ext_resource path="res://key-export.png" type="Texture" id=33]
 [ext_resource path="res://Hungry.ttf" type="DynamicFontData" id=34]
+[ext_resource path="res://logo/logo1.png" type="Texture" id=35]
+[ext_resource path="res://logo/logo2.png" type="Texture" id=36]
+[ext_resource path="res://logo/logo3.png" type="Texture" id=37]
+[ext_resource path="res://logo/logo4.png" type="Texture" id=38]
+[ext_resource path="res://logo/logo5.png" type="Texture" id=39]
+[ext_resource path="res://logo/logo6.png" type="Texture" id=40]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=41]
+
+[sub_resource type="RectangleShape2D" id=13]
+extents = Vector2( 157.278, 122.351 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6.88753, 43.9907 )
@@ -41,25 +51,130 @@ extents = Vector2( 6.88753, 43.9907 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 5.02588, 49.62 )
 
-[sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 7.92126, 49.62 )
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 5.02588, 42.8889 )
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 5.02588, 39.7112 )
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 5.02588, 40.1084 )
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 52.6561, 86.0881 )
+extents = Vector2( 7.92126, 49.62 )
 
 [sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 52.6561, 86.0881 )
+
+[sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 17.5655, 12.9571 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=6]
 size = 32
 font_data = ExtResource( 34 )
+
+[sub_resource type="Animation" id=12]
+resource_name = "float_away"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 41.5623, 103.043 ), Vector2( 41.5623, -52.6295 ) ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "float_up"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.15 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 41.5623, 274.05 ), Vector2( 41.562, 110 ), Vector2( 41.562, 118 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "idle"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 41.562, 118 ), Vector2( 41.5623, 114.65 ), Vector2( 41.562, 118 ), Vector2( 41.5623, 114.65 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1.7411, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 35 ), ExtResource( 36 ), ExtResource( 37 ), ExtResource( 38 ), ExtResource( 39 ), ExtResource( 40 ) ]
+}
+
+[sub_resource type="DynamicFont" id=14]
+size = 64
+font_data = ExtResource( 34 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 32
+font_data = ExtResource( 34 )
+
+[sub_resource type="Animation" id=16]
+resource_name = "fade"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 72, 271.013 ), Vector2( 72, 135.02 ), Vector2( 72, 104.146 ) ]
+}
 
 [node name="World" type="Node"]
 script = ExtResource( 1 )
 
 [node name="CurrentLevel" type="Node2D" parent="."]
 pause_mode = 2
-editor/display_folded = true
 script = ExtResource( 2 )
 
 [node name="Level1" parent="CurrentLevel" instance=ExtResource( 3 )]
@@ -143,18 +258,22 @@ position = Vector2( -1, -511 )
 [node name="Level26" parent="CurrentLevel" instance=ExtResource( 28 )]
 position = Vector2( -1, -255 )
 
+[node name="FinalArea" type="Area2D" parent="CurrentLevel"]
+editor/display_folded = true
+script = ExtResource( 29 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CurrentLevel/FinalArea"]
+position = Vector2( 0, 256 )
+shape = SubResource( 13 )
+
 [node name="Music" type="AudioStreamPlayer" parent="."]
 pause_mode = 2
-stream = ExtResource( 29 )
+stream = ExtResource( 30 )
 
 [node name="GameTimer" type="Timer" parent="."]
 pause_mode = 2
 process_mode = 0
 wait_time = 2.0
-autostart = true
-
-[node name="Player" parent="." instance=ExtResource( 30 )]
-position = Vector2( 10.1603, 100.651 )
 
 [node name="Camera" type="Camera2D" parent="."]
 pause_mode = 2
@@ -195,6 +314,26 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/4"]
 shape = SubResource( 1 )
 
+[node name="5" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 649, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/5"]
+shape = SubResource( 1 )
+
+[node name="18" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 905, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/18"]
+shape = SubResource( 1 )
+
 [node name="8" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true
 position = Vector2( 1158.45, -85.8871 )
@@ -206,7 +345,6 @@ __meta__ = {
 shape = SubResource( 1 )
 
 [node name="13" type="Area2D" parent="Checkpoints"]
-editor/display_folded = true
 position = Vector2( 1139.58, -157.354 )
 __meta__ = {
 "_edit_group_": true
@@ -214,6 +352,33 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/13"]
 shape = SubResource( 2 )
+
+[node name="20" type="Area2D" parent="Checkpoints"]
+position = Vector2( 1160.58, -157.354 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/20"]
+shape = SubResource( 7 )
+
+[node name="21" type="Area2D" parent="Checkpoints"]
+position = Vector2( 881.58, -157.354 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/21"]
+shape = SubResource( 9 )
+
+[node name="22" type="Area2D" parent="Checkpoints"]
+position = Vector2( 909.58, -157.354 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/22"]
+shape = SubResource( 8 )
 
 [node name="14" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true
@@ -223,7 +388,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/14"]
-shape = SubResource( 6 )
+shape = SubResource( 3 )
 
 [node name="17" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true
@@ -233,7 +398,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/17"]
-shape = SubResource( 6 )
+shape = SubResource( 3 )
 
 [node name="16" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true
@@ -264,7 +429,7 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/12"]
 position = Vector2( 25.8828, 26.2063 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="9" type="Area2D" parent="Checkpoints"]
 editor/display_folded = true
@@ -274,6 +439,16 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/9"]
+shape = SubResource( 1 )
+
+[node name="19" type="Area2D" parent="Checkpoints"]
+editor/display_folded = true
+position = Vector2( 1677.66, 96.7759 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/19"]
 shape = SubResource( 1 )
 
 [node name="10" type="Area2D" parent="Checkpoints"]
@@ -315,12 +490,13 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/3"]
 position = Vector2( 0, 34 )
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 pause_mode = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+editor/display_folded = true
 
 [node name="GUI" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
@@ -338,10 +514,79 @@ margin_left = 24.7843
 margin_top = -6.10503
 margin_right = 66.7843
 margin_bottom = 23.895
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 0
 custom_constants/shadow_offset_y = 2
-text = "0/5"
+text = "0/7"
 valign = 1
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/GUI"]
+margin_left = 41.5623
+margin_top = 274.05
+margin_right = 393.562
+margin_bottom = 357.05
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 35 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/GUI/TextureRect2"]
+playback_speed = 0.5
+anims/float_away = SubResource( 12 )
+anims/float_up = SubResource( 11 )
+anims/idle = SubResource( 10 )
+
+[node name="End" type="Control" parent="CanvasLayer/GUI"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 72.0
+margin_top = 271.013
+margin_right = 112.0
+margin_bottom = 311.013
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Header" type="Label" parent="CanvasLayer/GUI/End"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 92.0
+margin_bottom = 39.0
+rect_pivot_offset = Vector2( 56.7766, 31.242 )
+custom_fonts/font = SubResource( 14 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 0
+custom_constants/shadow_offset_y = 1
+text = "0:00"
+align = 1
+valign = 1
+
+[node name="FinalTime" type="Label" parent="CanvasLayer/GUI/End"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -41.0
+margin_top = -40.2269
+margin_right = 113.0
+margin_bottom = -10.2269
+rect_pivot_offset = Vector2( 56.7766, 31.242 )
+custom_fonts/font = SubResource( 15 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 0
+custom_constants/shadow_offset_y = 1
+text = "Final Time:"
+align = 1
+valign = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/GUI/End"]
+anims/fade = SubResource( 16 )
+
+[node name="Player" parent="." instance=ExtResource( 41 )]
+position = Vector2( 10.1603, 100.651 )
+[connection signal="body_entered" from="CurrentLevel/FinalArea" to="CurrentLevel/FinalArea" method="_on_FinalArea_body_entered"]
+[connection signal="final_time" from="CurrentLevel/FinalArea" to="." method="_on_FinalArea_final_time"]
 [connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]
+[connection signal="animation_finished" from="CanvasLayer/GUI/TextureRect2/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
